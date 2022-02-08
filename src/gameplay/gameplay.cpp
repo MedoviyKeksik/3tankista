@@ -43,7 +43,6 @@ bool GameAlgorithm::IsCorrectShootPosition(
     bool result = false;
     if (tank->GetTankType() == TankType::AT_SPG)
     {
-        pathFinder->SetStartPoint(tank->GetPosition());
         if (pathFinder->GetDistance(position) != NOPATH &&
             pathFinder->GetDistance(position) ==
                 GameArea::GetDistance(tank->GetPosition(), position))
@@ -92,6 +91,7 @@ void GameAlgorithm::Play()
     for (auto& tank : currentPlayerTanks)
     {
         // Can attack someone?
+        pathFinder->SetStartPoint(tank->GetPosition());
         std::shared_ptr<AbstractTank> target = nullptr;
         for (auto& enemyArray : enemies)
         {
@@ -126,7 +126,6 @@ void GameAlgorithm::Play()
             if (isOnTheBase)
                 continue; // STAY
             // Move to the nearest base
-            pathFinder->SetStartPoint(tank->GetPosition());
             Vector3i nearestBasePos = map->GetContent().GetBase().front();
             for (auto& basePosition : map->GetContent().GetBase())
             {

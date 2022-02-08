@@ -7,7 +7,8 @@ enum class CellState
 {
     EMPTY,
     ENEMY,
-    FRIEND
+    FRIEND,
+    OBSTACLE
 };
 
 class GameArea

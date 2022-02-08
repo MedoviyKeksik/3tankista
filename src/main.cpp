@@ -15,7 +15,7 @@ int main()
 {
     // LOGIN
 
-    std::string name = "", password = "", game = "";
+    std::string name, password, game;
     int         numberTurns = 0, numberPlayers = 0;
     bool        observer = false;
 
@@ -30,7 +30,7 @@ int main()
     std::cout << "Write number of players: ";
     std::cin >> numberPlayers;
     std::cout << "Write are you observer(y/n): ";
-    std::string isObserver = "";
+    std::string isObserver;
     std::cin >> isObserver;
     observer = isObserver.at(0) == 'y';
 

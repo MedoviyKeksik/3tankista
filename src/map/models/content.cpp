@@ -11,5 +11,5 @@ void from_json(const nlohmann::json& json, Content& content)
     // json.at("catapult").get_to<std::vector<...>>(content.GetCatapult().);
     // json.at("hard_repair").get_to<std::vector<...>>(content.GetHardRepair().);
     // json.at("light_repair").get_to<std::vector<...>>(content.GetLightRepair().);
-    // json.at("obstacle").get_to<std::vector<...>>(content.GetObstacle().);
+    json.at("obstacle").get_to<std::vector<Vector3i>>(content.GetObstacle());
 }

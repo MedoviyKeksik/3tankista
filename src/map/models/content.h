@@ -3,7 +3,6 @@
 #include "catapult.h"
 #include "hard_repair.h"
 #include "light_repair.h"
-#include "obstacle.h"
 #include "utility/matrix.hpp"
 #include <vector>
 
@@ -38,7 +37,7 @@ public:
     auto&       GetHardRepair() { return this->hardRepair; }
     const auto& GetHardRepair() const { return this->hardRepair; }
 
-    void SetObstacle(Obstacle& obstacle)
+    void SetObstacle(std::vector<Vector3i>& obstacle)
     {
         this->obstacle = std::move(obstacle);
     }
@@ -50,7 +49,7 @@ private:
     Catapult              catapult;
     LightRepair           lightRepair;
     HardRepair            hardRepair;
-    Obstacle              obstacle;
+    std::vector<Vector3i> obstacle;
 };
 
 void to_json(nlohmann::json& json, const Content& content);

@@ -26,11 +26,9 @@ public:
     void SetPlayerId(const int& id) { this->playerId = id; }
     auto GetPlayerId() const { return playerId; }
 
-protected:
     void SetTankType(const TankType& tankType) { this->tankType = tankType; }
     auto GetTankType() const { return tankType; }
 
-public:
     void SetPosition(Vector3i& position)
     {
         this->position = std::move(position);

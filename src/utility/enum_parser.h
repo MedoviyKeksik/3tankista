@@ -33,7 +33,7 @@ public:
             }
         }
 
-        return std::string("");
+        return {};
     }
 
 private:

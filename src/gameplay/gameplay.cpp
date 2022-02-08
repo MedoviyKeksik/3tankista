@@ -9,8 +9,8 @@ GameAlgorithm::GameAlgorithm(std::shared_ptr<GameArea> gameArea,
 {
 }
 
-bool GameAlgorithm::CheckNeutrality(std::shared_ptr<AbstractTank> playerTank,
-                                    std::shared_ptr<AbstractTank> enemyTank)
+bool GameAlgorithm::CheckNeutrality(std::shared_ptr<AbstractTank>& playerTank,
+                                    std::shared_ptr<AbstractTank>& enemyTank)
 {
     bool neutrality    = false;
     auto attackMatrix  = gameState->GetAttackMatrix();
@@ -37,6 +37,27 @@ bool GameAlgorithm::CheckNeutrality(std::shared_ptr<AbstractTank> playerTank,
     return neutrality;
 }
 
+bool GameAlgorithm::IsCorrectShootPosition(
+    const std::shared_ptr<AbstractTank>& tank, const Vector3i& position)
+{
+    bool result = false;
+    if (tank->GetTankType() == TankType::AT_SPG)
+    {
+        pathFinder->SetStartPoint(tank->GetPosition());
+        if (pathFinder->GetDistance(position) != NOPATH &&
+            pathFinder->GetDistance(position) ==
+                GameArea::GetDistance(tank->GetPosition(), position))
+        {
+            result = true;
+        }
+    }
+    else
+    {
+        result = gameArea->GetCell(position) != CellState::OBSTACLE;
+    }
+    return result;
+}
+
 void GameAlgorithm::Play()
 {
     gameArea->ClearMap();
@@ -61,11 +82,13 @@ void GameAlgorithm::Play()
             }
         }
     }
+    for (auto& cell : map->GetContent().GetObstacle())
+    {
+        gameArea->SetCell(cell, CellState::OBSTACLE);
+    }
     std::sort(currentPlayerTanks.begin(),
               currentPlayerTanks.end(),
-              [](const std::shared_ptr<AbstractTank>& lhs,
-                 const std::shared_ptr<AbstractTank>& rhs)
-              { return *lhs < *rhs; });
+              [](auto& lhs, auto& rhs) { return *lhs < *rhs; });
     for (auto& tank : currentPlayerTanks)
     {
         // Can attack someone?
@@ -74,9 +97,11 @@ void GameAlgorithm::Play()
         {
             for (auto& potentialTarget : enemyArray)
             {
+                /* check neutrality rule && gameState->GetAttackMatrix()*/
                 if (tank->CanShoot(potentialTarget->GetPosition()) &&
-                    CheckNeutrality(tank, potentialTarget)/* check neutrality rule &&
-                     gameState->GetAttackMatrix()*/)
+                    IsCorrectShootPosition(tank,
+                                           potentialTarget->GetPosition()) &&
+                    CheckNeutrality(tank, potentialTarget))
                 {
                     if (target == nullptr ||
                         target->GetHealth() > potentialTarget->GetHealth())

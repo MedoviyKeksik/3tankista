@@ -20,9 +20,10 @@ public:
     virtual ~GameAlgorithm() = default;
 
     /// True, if tank can attack enemy
-    bool CheckNeutrality(std::shared_ptr<AbstractTank> playerTank,
-                         std::shared_ptr<AbstractTank> enemyTank);
-
+    bool CheckNeutrality(std::shared_ptr<AbstractTank>& playerTank,
+                         std::shared_ptr<AbstractTank>& enemyTank);
+    bool IsCorrectShootPosition(const std::shared_ptr<AbstractTank>& tank,
+                                const Vector3i&               position);
     void Play();
 
 public:
